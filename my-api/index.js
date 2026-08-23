@@ -48,3 +48,6 @@ app.listen(port,() =>{
 mongoose.connect(connectiostring)
 .then(()=>{console.log("Connected to mongodb sucessfully")})
 .catch((e)=>(console.log(e)))
+
+
+module.exports = app;
