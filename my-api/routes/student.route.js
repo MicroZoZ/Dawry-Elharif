@@ -44,7 +44,6 @@ router.get("/finishedQuizes/:id",async(req,res)=>{
         const attemptedQuiz = await StudentAttempt.findById(attemptId).populate("answers.questionId").populate("quiz")
         if(!attemptedQuiz) return res.json({success:false,message:"invalid attempt Id"})
         const userId = req.auth.id
-        console.log(attemptedQuiz)
         //const User
         //if(!((attemptedQuiz.student) === userId)) return res.json({success:false,message:"you are not allowed to see this attempt"})
         return res.json({success:true,data:attemptedQuiz})

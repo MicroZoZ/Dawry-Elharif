@@ -74,7 +74,6 @@ router.post("/:yearId" ,admin, async(req,res)=>{
         const studyYearId = req.params.yearId
         if(!name || !totalTimeByMinutes || !studyYearId) return res.status(400).json({success:false,message:"all fields are required"})
         const StudyYear = await studyYear.findById(studyYearId)
-    console.log(totalTimeByMinutes)
     if(!StudyYear) return res.status(400).json({success:false, messgae:"there is no study year with that ID"})
         const newquiz = await quiz.create({
         name: name,
@@ -155,7 +154,6 @@ router.put("/end-quiz/:id",superAdmin,async(req,res)=>{
 
 router.get("/expired/:id",admin,async(req,res)=>{
     try{
-        console.log("helllooooooo")
         const quizId = req.params.id
         if(!quizId) return res.status(400).json({success:false,message:"quizID is missing"})
         const Quiz = await quiz.findById(quizId)

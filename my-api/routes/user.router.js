@@ -10,7 +10,6 @@ router.post("/register",registerValidation,handleValidationErors,async (req,res)
     const emailExistance = await User.findOne({email})
     const phoneNumber = req.body.phoneNumber
     if(emailExistance) return res.status(400).send({message:"email alread existed please chose another email"})
-    console.log(phoneNumber[0]==="+")
     if(!(phoneNumber[0]==="+"&&phoneNumber[1]==="2")) return ress.status(400).json({success:false,message:"please enter valid phone number",success:false})
         try{    
         const user = await User.create(
@@ -22,7 +21,6 @@ router.post("/register",registerValidation,handleValidationErors,async (req,res)
     }
 )
     if(!user) return res.status(400).json({success:false,message:"failed to create user"})
-    console.log(user)
     return res.status(201).json({
         success:true,
         message:"user created sucessfully",

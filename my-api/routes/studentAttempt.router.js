@@ -126,7 +126,6 @@ router.post("/:quizId/answer",async(req,res)=>{
         return res.json({success:false,message:"your exam has been Finished",score:attempt.score})
     }
     const CurrentQuestion = questions[attempt.currentQuestionIndex]
-    console.log(CurrentQuestion)
     if((String(CurrentQuestion._id)!==String(questionId))) return res.status(400).json({success:false,message:"you are not on that question anymore"})
     const isCorrect = CurrentQuestion.correctAnswer === selectedAnswer;
             attempt.answers.push({

@@ -32,7 +32,6 @@ router.put("/:id",admin,async (req,res)=>{
         }    
     })
 router.delete("/:id",admin,async (req,res)=>{
-    console.log(req.body)
     try{
 
     const questionId = req.params.id
