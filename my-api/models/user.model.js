@@ -7,6 +7,11 @@ const userSchema = mongoose.Schema({
         required: true,
         unique:true,
     },
+    phone:{
+        type:String ,
+        required: true,
+        default: "+201146321974"
+    },
     password:{
         type:String,
         required:true,
@@ -21,7 +26,8 @@ const userSchema = mongoose.Schema({
         type:String,
         required:true,
         trim:true,
-    },    score:{
+    },    
+    score:{
         type:Number,
         default:0,
     },

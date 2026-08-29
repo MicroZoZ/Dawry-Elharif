@@ -4,6 +4,7 @@ const {admin,superAdmin} = require("../middlewares/roleAuth")
 const quiz = require("../models/quiz.model")
 const {studyYear} = require("../models/studyYear.model")
 const Question = require("../models/question.model")
+const StudentAttempt = require("../models/studentAttempt.model")
 
 router.get("/" ,admin, async(req,res)=>{
     try{
@@ -151,5 +152,38 @@ router.put("/end-quiz/:id",superAdmin,async(req,res)=>{
         } catch(err){
             return res.status(400).json(err.message)
         }})
+
+router.get("/expired/:id",admin,async(req,res)=>{
+    try{
+        console.log("helllooooooo")
+        const quizId = req.params.id
+        if(!quizId) return res.status(400).json({success:false,message:"quizID is missing"})
+        const Quiz = await quiz.findById(quizId)
+        if(!(Quiz.state === "expired"))return res.json({success:false,message:`this exam is not expired` })
+        const attemptedQuizLists = await StudentAttempt.find({quiz:quizId,completed:true}).select("-answers").populate("student")
+        if(!attemptedQuizLists || attemptedQuizLists.length<=0)  return res.json({message:"this quize has no attempts yet"})
+        return res.json({data:attemptedQuizLists})
+    }
+    catch(err){
+        return res.status(400).json(err.message)
+    }
+})
+
+router.get("/expired/:id/:attemptID",admin,async(req,res)=>{
+    try{
+        const quizId = req.params.id
+        if(!quizId) return res.status(400).json({success:false,message:"quizID is missing"})
+            const Quiz = await quiz.findById(quizId)
+            if(!(Quiz.state === "expired"))return res.json({success:false,message:`this exam is not expired` })
+        const attemptID = req.params.attemptID
+        if(!attemptID) return res.status(400).json({success:false,message:"attemptID is missing"})
+        const attemptedQuizLists = await StudentAttempt.findById(attemptID).populate("answers.questionId").populate("student")
+        if(!attemptedQuizLists || attemptedQuizLists.length<=0)  return res.json({message:"this quiz has no attempts yet"})
+        return res.json({data:attemptedQuizLists})
+    }
+    catch(err){
+        return res.status(400).json(err.message)
+    }
+})
 
     module.exports = router

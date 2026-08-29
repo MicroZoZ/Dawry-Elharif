@@ -35,11 +35,11 @@ catch(err){
 router.post("/changepassword/:id",admin,changePasswordValidator,handleValidationErors,async(req,res)=>{
     try{
         const newPassword = req.body.password
+        const phone = req.body.phone
         if(!newPassword) return res.json({success:false,message:"please enter valid password"})
-
+        if(!phone) return res.json({success:false,message:"please enter valid phone"})
         const id = req.params.id
         const student = await User.findById(id)
-        
         if(!student) return res.json({success:false,message:"there is no student with that id"})
        
         if(!(student.role === "student") && !(req.auth.role ==="superAdmin"))return res.json({success:false,message: "authorization failed you can only change student password"})

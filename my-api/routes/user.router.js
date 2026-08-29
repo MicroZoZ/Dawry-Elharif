@@ -8,20 +8,25 @@ const {handleValidationErors,registerValidation,loginValidation,userUpdateValida
 router.post("/register",registerValidation,handleValidationErors,async (req,res) =>{
     const email = req.body.email
     const emailExistance = await User.findOne({email})
+    const phoneNumber = req.body.phoneNumber
     if(emailExistance) return res.status(400).send({message:"email alread existed please chose another email"})
-        try{
-    const user = await User.create(
-        {userName:req.body.userName,
-            email: req.body.email,
-            password: req.body.password ,
-            studyYear:req.body.studyYear
-        }
-    )
-    const token = generatetoken(user)
-    return res.status(201).json({success:true,
+    console.log(phoneNumber[0]==="+")
+    if(!(phoneNumber[0]==="+"&&phoneNumber[1]==="2")) return ress.status(400).json({success:false,message:"please enter valid phone number",success:false})
+        try{    
+        const user = await User.create(
+    {userName:req.body.userName,
+        phone:phoneNumber,
+        email: req.body.email,
+        password: req.body.password ,
+        studyYear:req.body.studyYear
+    }
+)
+    if(!user) return res.status(400).json({success:false,message:"failed to create user"})
+    console.log(user)
+    return res.status(201).json({
+        success:true,
         message:"user created sucessfully",
         data: user.toJSON(),
-        token:token
     })
     }
     catch(e){
@@ -64,9 +69,9 @@ router.post("/login",loginValidation,handleValidationErors,async (req,res)=>{
 
 router.get("/profile", async (req,res) => {
     try{
-    const user = await User.findById(req.auth.id)
+    const id = req.auth.id
+    const user = await User.findOne({_id:req.auth.id}).populate("studyYear")
     if(!user) return res.status(400).json({message:"invalid User"})
-        return res.status(200).send(user)
     return res.json({success:true , data:user})
 }
 
@@ -76,16 +81,11 @@ catch(err){
 })
 router.put("/profile", userUpdateValidations,handleValidationErors,async (req,res) => {
     try{
-    const {email,password,role,userName} = req.body
+    const {password,retypedPassword} = req.body
     const updateData = {};
-    if(email){
-        const emailExist = await User.findOne({email,_id:{$ne:req.auth.id}})
-        if(emailExist) return res.json({success:false,message:"this email is already exist"})    
-        updateData.email = email
-        }
-    if(userName) updateData.userName = userName
-    if(password) updateData.password = password
-    updateData.role = role
+
+    if(password&&(password === retypedPassword)) updateData.password = password
+    else{return res.json({success:false,message:"password doesnt match please type it again"})}
     
     const user = await User.findById(req.auth.id)
     Object.keys(updateData).forEach((key)=>{
