@@ -63,7 +63,7 @@ router.post("/:quizId", async(req,res)=>{
         else{return res.status(400).json({success:false,message:"this quiz cant be solved right now"})}}
     if(attempt){
         if(attempt.completed){return res.status(400).json({success:false,message:"your have completed this quiz before"})}
-        const attemptExpireCheckhandle = attemptExpireCheck(res,Quiz,attempt,student)
+        const attemptExpireCheckhandle = await attemptExpireCheck(res,Quiz,attempt,student)
         if(attemptExpireCheckhandle) return;
     }
     else{
@@ -106,7 +106,7 @@ router.post("/:quizId/answer",async(req,res)=>{
     const attempt = await StudentAttempt.findOne({ student: studentId, quiz: quizId });
     if(attempt){
         if(attempt.completed){return res.status(400).json({success:false,message:"your have completed this quiz before"})}
-        const attemptExpireCheckhandle = attemptExpireCheck(res,Quiz,attempt,student)
+        const attemptExpireCheckhandle = await attemptExpireCheck(res,Quiz,attempt,student)
         if(attemptExpireCheckhandle) return;
     }
     else{return res.status(404).json({ success: false, message: "no attempt found, start the quiz first" });}
