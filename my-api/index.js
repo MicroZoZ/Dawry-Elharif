@@ -23,7 +23,7 @@ app.use(authMiddleWare)
 app.use(morgan("tiny"))
 app.use(express.json())
 app.use(cors({
-    origin:["0.0.0.0"],
+    origin: '*',
     methods:["GET" , "POST" , "PUT" , "DELETE"],
     credentials: true,
     allowedHeaders:["Content-Type" , "Authorization" , "Accept-Language"]
