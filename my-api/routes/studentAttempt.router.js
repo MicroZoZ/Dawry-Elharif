@@ -59,7 +59,7 @@ router.post("/:quizId", async(req,res)=>{
     let attempt = await StudentAttempt.findOne({student:studentId,quiz:quizId})
 
     if (!(Quiz.state === "in-progress")){
-        if(attempt&&!(attempt.completed)){finishQuiz(res,attempt,student,expiresAt,quizId,"your exam time has been expired")}
+        if(attempt&&!(attempt.completed)){return finishQuiz(res,attempt,student,expiresAt,quizId,"your exam time has been expired")}
         else{return res.status(400).json({success:false,message:"this quiz cant be solved right now"})}}
     if(attempt){
         if(attempt.completed){return res.status(400).json({success:false,message:"your have completed this quiz before"})}
@@ -112,7 +112,7 @@ router.post("/:quizId/answer",async(req,res)=>{
     else{return res.status(404).json({ success: false, message: "no attempt found, start the quiz first" });}
 
     if (!(Quiz.state === "in-progress")){
-        if(attempt&&!(attempt.completed)){finishQuiz(res,attempt,student,expiresAt,quizId,"your exam time has been expired")}
+        if(attempt&&!(attempt.completed)){return finishQuiz(res,attempt,student,expiresAt,quizId,"your exam time has been expired")}
         else{return res.status(400).json({success:false,message:"this quiz cant be solved right now"})}}
 
     const questions = await Question.find({ quizId }).sort({ createdAt: 1 });
