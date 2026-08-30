@@ -19,15 +19,15 @@ const {admin} = require("./middlewares/roleAuth")
 const morgan = require('morgan')
 const authMiddleWare = require("./middlewares/auth.middleware")
 
-app.use(authMiddleWare)
-app.use(morgan("tiny"))
-app.use(express.json())
 app.use(cors({
     origin: '*',
     methods:["GET" , "POST" , "PUT" , "DELETE"],
     credentials: true,
     allowedHeaders:["Content-Type" , "Authorization" , "Accept-Language"]
 }))
+app.use(authMiddleWare)
+app.use(morgan("tiny"))
+app.use(express.json())
 
 app.use(`${api}/studyYear`,admin,studyYearRouter)
 app.use(`${api}/admin`,adminRouter)
