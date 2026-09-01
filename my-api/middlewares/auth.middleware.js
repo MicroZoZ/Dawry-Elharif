@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken")
 const dotenv = require("dotenv")
 const allowedRoutes = [
     "POST:/API/V1/auth/login",
-    "POST:/API/V1/auth/register",
 ]
 const {User} = require("../models/user.model")
 

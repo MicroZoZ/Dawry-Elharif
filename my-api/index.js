@@ -14,6 +14,7 @@ const questionRouter = require("./routes/question.router")
 const studentAttempt = require("./routes/studentAttempt.router")
 const student = require("./routes/student.route")
 
+
 const {admin} = require("./middlewares/roleAuth") 
 
 const morgan = require('morgan')
@@ -37,11 +38,6 @@ app.use(`${api}/question`,questionRouter)
 app.use(`${api}/QuizAttempt`,studentAttempt)
 app.use(`${api}/student`,student)
 
-
-
-app.get(`${api}/home` , (req,res)=>{
-    res.send("hello world")
-})
 app.listen(port,() =>{
     console.log(`listening on https://localhost:${port}`)
 })
