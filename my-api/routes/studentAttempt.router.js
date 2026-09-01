@@ -57,9 +57,8 @@ router.post("/:quizId", async(req,res)=>{
     const Quiz = await quiz.findById(quizId)
     if(!Quiz) return res.status(400).json({success:false,message:"there is no quiz with that ID"})
     let attempt = await StudentAttempt.findOne({student:studentId,quiz:quizId})
-
     if (!(Quiz.state === "in-progress")){
-        if(attempt&&!(attempt.completed)){return finishQuiz(res,attempt,student,expiresAt,quizId,"your exam time has been expired")}
+        if(attempt&&!(attempt.completed)){return finishQuiz(res,attempt,student,new Date(startedAt.getTime()+(20*60*1000)),quizId,"your exam time has been expired")}
         else{return res.status(400).json({success:false,message:"this quiz cant be solved right now"})}}
     if(attempt){
         if(attempt.completed){return res.status(400).json({success:false,message:"your have completed this quiz before"})}
@@ -76,7 +75,7 @@ router.post("/:quizId", async(req,res)=>{
     const questions = await Question.find({ quizId }).select("-correctAnswer").sort({ createdAt: 1 });
     if(attempt.currentQuestionIndex >= questions.length) {
             const message = "your exam time has been Finished"
-            return await finishQuiz(res,attempt,student,expiresAt,quizId,message);
+            return await finishQuiz(res,attempt,student,new Date(startedAt.getTime()+(20*60*1000)),quizId,message);
         }
     const startedAt = new Date(attempt.startedAt)
     const totalTimeByMinutes = Quiz.totalTimeByMinutes
@@ -112,7 +111,7 @@ router.post("/:quizId/answer",async(req,res)=>{
     else{return res.status(404).json({ success: false, message: "no attempt found, start the quiz first" });}
 
     if (!(Quiz.state === "in-progress")){
-        if(attempt&&!(attempt.completed)){return finishQuiz(res,attempt,student,expiresAt,quizId,"your exam time has been expired")}
+        if(attempt&&!(attempt.completed)){return finishQuiz(res,attempt,student,new Date(startedAt.getTime()+(20*60*1000)),quizId,"your exam time has been expired")}
         else{return res.status(400).json({success:false,message:"this quiz cant be solved right now"})}}
 
     const questions = await Question.find({ quizId }).sort({ createdAt: 1 });
