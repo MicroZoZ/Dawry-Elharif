@@ -118,7 +118,7 @@ router.post("/:quizId/answer",async(req,res)=>{
     const questions = await Question.find({ quizId }).sort({ createdAt: 1 });
     if(attempt.currentQuestionIndex >= questions.length) {
         attempt.completed = true
-        attempt.expiresAt = expiresAt.getTime()
+        attempt.expiresAt = Date.now()
         await attempt.save()
         student.score += attempt.score
         student.examAttempted += 1

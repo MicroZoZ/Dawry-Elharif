@@ -22,6 +22,5 @@ StudentAttemptSchema.index({ student: 1, quiz: 1 }, { unique: true });
 StudentAttemptSchema.pre("save",async function(){
     const correctCount = this.answers.filter(a => a.isCorrect).length;
     this.score = correctCount
-
 })
 module.exports = mongoose.model("StudentAttempt",StudentAttemptSchema)
