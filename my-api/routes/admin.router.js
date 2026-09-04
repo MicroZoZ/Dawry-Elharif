@@ -31,7 +31,7 @@ catch(err){
     return res.status(400).json({message:err.msg})
 }
 })
-router.delete("/editStudent:id",admin , async(req,res)=>{
+router.delete("/editStudent/:id",admin , async(req,res)=>{
         const id = req.params.id
         if(!student) return res.json({success:false,message:"there is no student with that id"})
         if(!(student.role === "student") && !(req.auth.role ==="superAdmin"))return res.json({success:false,message: "authorization failed you can only change student password"})
