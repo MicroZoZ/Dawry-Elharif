@@ -22,8 +22,8 @@ const userUpdateValidations = [
     body("password").isLength({min:6}).withMessage("برجاء ادخل رمز سري مكون من أكثر من 6 أحرف"),
 ]
 const changePasswordValidator = [
-    body("password").isLength({min:6}).withMessage("password must be more than 6 digets"),
-    body("phoneNumber").isLength({min:13}).withMessage("من فضلك ادخل رقم الهاتف صحيح "),
+    body("password").isLength({min:6}).withMessage("password must be more than 6 digets").optional(),
+    body("phone").isLength({min:13}).withMessage("من فضلك ادخل رقم الهاتف صحيح ").optional(),
 
 ]
 
