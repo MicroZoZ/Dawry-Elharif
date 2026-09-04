@@ -31,22 +31,37 @@ catch(err){
     return res.status(400).json({message:err.msg})
 }
 })
-
-router.post("/changepassword/:id",admin,changePasswordValidator,handleValidationErors,async(req,res)=>{
+router.delete("/editStudent:id",admin , async(req,res)=>{
+        const id = req.params.id
+        if(!student) return res.json({success:false,message:"there is no student with that id"})
+        if(!(student.role === "student") && !(req.auth.role ==="superAdmin"))return res.json({success:false,message: "authorization failed you can only change student password"})
+    try{
+        const student = await User.findByIdAndDelete(id)
+        if(!student){
+            return res.json({message:`cant find student with an id ${id}`})
+        }
+        return res.json({message:"student deleted successfully"})
+    }
+    catch(err){
+        return res.status(400).json({success:false,message:err.message})
+    }
+})
+router.post("/editStudent/:id",admin,changePasswordValidator,handleValidationErors,async(req,res)=>{
     try{
         const newPassword = req.body.password
         const phone = req.body.phone
-        if(!newPassword) return res.json({success:false,message:"please enter valid password"})
-        if(!phone) return res.json({success:false,message:"please enter valid phone"})
+        const userName = req.body.userName
         const id = req.params.id
         const student = await User.findById(id)
         if(!student) return res.json({success:false,message:"there is no student with that id"})
-       
         if(!(student.role === "student") && !(req.auth.role ==="superAdmin"))return res.json({success:false,message: "authorization failed you can only change student password"})
-        
-        student.password = newPassword
+                
+        if(newPassword) student.password = newPassword
+        if(req.body.studyYear) {student.studyYear = req.body.studyYear}
+        if(phone)student.phone = phone
+        if(userName) student.userName = userName
         await student.save()
-        return res.status(201).json({success:true,message:"password Changed Sucessfully"})
+        return res.status(201).json({success:true,message:"student Changed Sucessfully"})
 }
     catch(err){
         return res.status(500).json({success:false,message:err.message})

@@ -22,10 +22,12 @@ const userUpdateValidations = [
     body("password").isLength({min:6}).withMessage("برجاء ادخل رمز سري مكون من أكثر من 6 أحرف"),
 ]
 const changePasswordValidator = [
-    body("password").notEmpty().isLength({min:6}).withMessage("password must be more than 6 digets"),
+    body("password").isLength({min:6}).withMessage("password must be more than 6 digets"),
+    body("phoneNumber").withMessage("من فضلك ادخل رقم الهاتف ").isLength({min:13}),
+
 ]
 
 const changeRole = [
-    body("role").notEmpty().isIn(["admin","student"]).withMessage("role must be admin or student"),
+    body("role").notEmpty().isIn(["superAdmin","admin","student"]).withMessage("role must be admin or student"),
 ]
 module.exports = {handleValidationErors,changeRole,changePasswordValidator,registerValidation,loginValidation,userUpdateValidations}
