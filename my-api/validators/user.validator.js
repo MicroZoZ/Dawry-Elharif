@@ -4,7 +4,7 @@ const {body , validationResult} = require("express-validator")
     body("email").isEmail().withMessage("please enter valid email"),
     body("password").isLength({min:6}).withMessage("password must be more than 6 digits"),
     body("userName").notEmpty().withMessage("please enter username"),
-    body("phoneNumber").notEmpty().withMessage("من فضلك ادخل رقم الهاتف ").isLength({min:13})
+    body("phoneNumber").notEmpty().isLength({min:13}).withMessage("من فضلك ادخل رقم هاتف صحيح")
 ]
 
 const loginValidation =[
@@ -23,7 +23,7 @@ const userUpdateValidations = [
 ]
 const changePasswordValidator = [
     body("password").isLength({min:6}).withMessage("password must be more than 6 digets"),
-    body("phoneNumber").withMessage("من فضلك ادخل رقم الهاتف ").isLength({min:13}),
+    body("phoneNumber").isLength({min:13}).withMessage("من فضلك ادخل رقم الهاتف صحيح "),
 
 ]
 
